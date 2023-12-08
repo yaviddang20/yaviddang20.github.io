@@ -1,18 +1,29 @@
 ---
 layout: page
 title: About
-permalink: /about/
+permalink: /
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+# David Yang
 
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
+## About Me
+I am a master's student in Artificial Intelligence at the University of Texas at Austin. I am seeking to pursue a PhD in bioinformatics / computational biology starting Fall 2024.
 
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
+## Projects
+List or describe your projects here. You can use bullet points or a structured format.
 
+- **Project 1:** Description of Project 1.
+- **Project 2:** Description of Project 2.
+- ...
 
-[jekyll-organization]: https://github.com/jekyll
+## Publications
+List your publications here. You can format them as a list or in any other structured way.
+
+1. [Title of Publication](link-to-publication-if-available), Publication Year
+2. [Title of Another Publication](link-to-another-publication), Publication Year
+
+<!-- 
+---
+layout: page
+title: Your Name
+--- -->
