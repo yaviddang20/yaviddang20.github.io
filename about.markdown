@@ -4,7 +4,7 @@ title: About
 permalink: /
 ---
 
-# David Yang
+<!-- # David Yang
 
 ## About Me
 I am a master's student in Artificial Intelligence at the University of Texas at Austin. I am seeking to pursue a PhD in bioinformatics / computational biology starting Fall 2024.
@@ -20,7 +20,7 @@ List or describe your projects here. You can use bullet points or a structured f
 List your publications here. You can format them as a list or in any other structured way.
 
 1. [Title of Publication](link-to-publication-if-available), Publication Year
-2. [Title of Another Publication](link-to-another-publication), Publication Year
+2. [Title of Another Publication](link-to-another-publication), Publication Year -->
 
 <!-- 
 ---
