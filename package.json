@@ -1,0 +1,24 @@
+{
+  "name": "yaviddang20.github.io",
+  "version": "1.0.0",
+  "description": "This is a GitHub Pages website for showcasing the EECS 206A Robotics final project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yaviddang20/yaviddang20.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yaviddang20/yaviddang20.github.io/issues"
+  },
+  "homepage": "https://github.com/yaviddang20/yaviddang20.github.io#readme",
+  "dependencies": {
+    "spz-js": "^1.2.5"
+  }
+}

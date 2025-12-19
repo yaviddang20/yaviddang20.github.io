@@ -1,0 +1,3 @@
+[submodule "eecs206a/assets/spark"]
+	path = eecs206a/assets/spark
+	url = https://github.com/sparkjsdev/spark

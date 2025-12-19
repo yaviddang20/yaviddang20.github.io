@@ -9,9 +9,9 @@ permalink: /eecs206a/
 <div class="hero">
   <div class="hero-content">
     <h1 class="hero-title">EECS 206A Final Project</h1>
-    <p class="hero-subtitle">Hand–Eye Calibrated 3D Gaussian Splatting with a Robot Arm</p>
+    <p class="hero-subtitle">Hand–Eye Calibrated 3D Gaussian Splatting with a Robot Manipulator</p>
     <p class="hero-description">
-      Active perception and metric 3D reconstruction using robotic manipulation
+      Active perception and metric 3D scene reconstruction via robot-controlled viewpoint acquisition
     </p>
   </div>
 </div>
@@ -23,75 +23,81 @@ permalink: /eecs206a/
   <section class="overview">
     <h2>1. Introduction</h2>
 
-    <h3>(a) Project Goal</h3>
+    <h3>(a) Objective</h3>
     <p>
-      The goal of this project is to build an autonomous 3D reconstruction system
-      that integrates a robotic manipulator with hand–eye calibrated perception
-      and 3D Gaussian Splatting. A camera rigidly mounted to a robot arm captures
-      images from multiple viewpoints while executing planned motions. Using known
-      robot kinematics and accurate hand–eye calibration, camera poses are expressed
-      in a common world frame and used to reconstruct a high-fidelity 3D scene
-      representation.
+      This project investigates the integration of robotic manipulation, hand–eye
+      calibration, and neural scene representations to construct a metric 3D
+      reconstruction system. A camera rigidly mounted to a robotic manipulator is
+      actively repositioned to acquire multi-view observations of a scene. Using
+      known robot kinematics and an estimated hand–eye transformation, all camera
+      poses are expressed in a common world coordinate frame and used to train a
+      3D Gaussian Splatting model.
     </p>
 
-    <h3>(b) Motivation and Challenges</h3>
+    <h3>(b) Motivation and Technical Challenges</h3>
     <p>
-      This project is interesting because it combines robot kinematics, calibration,
-      and modern neural scene representations into a single pipeline. Unlike
-      traditional structure-from-motion approaches that estimate camera poses
-      visually, this system leverages precise robot motion to provide metric,
-      repeatable camera poses. Key challenges include accurate hand–eye calibration,
-      synchronization between motion and image capture, and maintaining consistency
-      between the robot coordinate frames and the learned 3D representation.
+      Accurate 3D reconstruction is a foundational capability for robotic perception
+      and manipulation. While classical structure-from-motion pipelines estimate
+      camera poses visually, they often suffer from scale ambiguity, drift, and
+      limited metric consistency. In contrast, leveraging robot-provided kinematics
+      enables direct access to metric, repeatable camera poses. This approach,
+      however, introduces challenges related to precise hand–eye calibration,
+      synchronization between motion execution and image capture, and maintaining
+      consistency across multiple coordinate frames throughout the reconstruction
+      pipeline.
     </p>
 
-    <h3>(c) Real-World Applications</h3>
+    <h3>(c) Applications</h3>
     <p>
-      The techniques developed in this project are applicable to robotic inspection,
-      manipulation, and automation tasks. Potential applications include object-level
-      scene understanding for grasp planning, robotic bin picking, industrial
-      inspection, and building digital twins of workspaces for simulation and motion
-      planning.
+      The resulting system is applicable to a range of robotic tasks requiring
+      accurate scene understanding, including grasp planning, bin picking,
+      inspection, and the construction of digital twins for simulation and motion
+      planning. The use of metric reconstructions aligned with the robot base frame
+      facilitates downstream integration with manipulation and control algorithms.
     </p>
   </section>
 
   <!-- ================= DESIGN ================= -->
 
   <section class="features">
-    <h2>2. Design</h2>
+    <h2>2. System Design</h2>
 
-    <h3>(a) Design Criteria</h3>
+    <h3>(a) Design Requirements</h3>
     <p>
-      The system must produce accurate metric 3D reconstructions aligned to the
-      robot base frame, support repeatable camera pose estimation using robot
-      kinematics, and integrate with motion planning and control. Robustness to
-      calibration error and sensor noise is also required.
+      The system is required to produce metric 3D reconstructions aligned to the
+      robot base frame, support repeatable and deterministic camera pose estimation
+      via robot kinematics, and integrate seamlessly with motion planning and control
+      software. Robustness to sensor noise and moderate calibration error is also a
+      key consideration.
     </p>
 
-    <h3>(b) System Design</h3>
+    <h3>(b) Architecture</h3>
     <p>
-      A fixed RGB camera is rigidly mounted to the robot end-effector. A hand–eye
-      calibration procedure estimates the transformation between the camera and
-      end-effector frames. The robot executes planned trajectories to sample views
-      around the scene, and camera poses are computed using forward kinematics
-      combined with the hand–eye transform. These poses are used directly in
-      3D Gaussian Splatting.
+      An RGB camera is rigidly mounted to the robot end-effector. A hand–eye
+      calibration procedure estimates the fixed transformation between the camera
+      and end-effector frames. The robot executes pre-planned trajectories to sample
+      viewpoints around the scene. Camera poses are computed via forward kinematics
+      composed with the hand–eye transformation and are provided directly to the
+      3D Gaussian Splatting optimization process.
     </p>
 
-    <h3>(c) Design Choices and Trade-offs</h3>
+    <h3>(c) Design Trade-offs</h3>
     <p>
-      Using robot-provided camera poses avoids drift and scale ambiguity but makes
-      the system sensitive to calibration accuracy. 3D Gaussian Splatting was chosen
-      over mesh- or voxel-based methods for its ability to represent fine geometry
-      and appearance, at the cost of higher training complexity.
+      Utilizing robot-derived camera poses eliminates scale ambiguity and drift
+      inherent to purely vision-based methods but makes reconstruction quality
+      sensitive to calibration accuracy. 3D Gaussian Splatting was selected over
+      voxel- or mesh-based representations due to its ability to capture fine
+      geometric and appearance details, at the cost of increased training
+      complexity and computational overhead.
     </p>
 
     <h3>(d) Engineering Considerations</h3>
     <p>
-      The reliance on robot kinematics improves repeatability and robustness in
-      controlled environments. However, calibration errors directly affect
-      reconstruction quality. The system prioritizes accuracy and consistency over
-      computational efficiency, which is acceptable for offline reconstruction.
+      The system prioritizes geometric accuracy and frame consistency over real-time
+      performance, making it suitable for offline reconstruction workflows. Errors
+      in calibration or kinematic modeling directly propagate into the learned scene
+      representation, emphasizing the importance of careful system calibration and
+      validation.
     </p>
   </section>
 
@@ -100,55 +106,68 @@ permalink: /eecs206a/
   <section class="methodology">
     <h2>3. Implementation</h2>
 
-    <h3>(a) Hardware</h3>
+    <h3>(a) Hardware Setup</h3>
     <p>
-      The hardware setup consists of a UR7e robotic arm equipped with a rigidly
-      mounted RealSense RGB camera. The camera mount ensures a fixed transformation
-      between the camera and end-effector. The robot executes pre-planned
-      trajectories to capture images from multiple viewpoints.
+      The experimental platform consists of a UR7e robotic manipulator equipped with
+      a rigidly mounted Intel RealSense RGB camera. A custom camera mount ensures a
+      fixed and repeatable transformation between the camera and the end-effector.
+      The robot executes structured trajectories to capture images from diverse
+      viewpoints around the target scene.
     </p>
 
-    <h3>(b) Software and Components</h3>
+    <h3>(b) Software Pipeline</h3>
     <p>
-      ROS2 is used for robot control, motion planning, and data collection. MoveIt
-      handles inverse kinematics and trajectory execution. OpenCV is used for
-      calibration and image processing. The captured images and camera poses are
-      processed using COLMAP and trained with a 3D Gaussian Splatting pipeline to
-      produce the final reconstruction.
+      Robot control, motion planning, and data collection are implemented using
+      ROS2, with MoveIt handling inverse kinematics and trajectory execution.
+      OpenCV is employed for calibration and image processing. Captured images and
+      corresponding camera poses are processed using COLMAP and subsequently used
+      to train a 3D Gaussian Splatting model, yielding the final scene
+      representation.
     </p>
   </section>
 
   <!-- ================= RESULTS ================= -->
 
-  <section class="results">
-    <h2>Results</h2>
-    <div class="results-gallery">
-      <div class="result-item">
-        <h3>3D Reconstruction</h3>
-        <p>
-          The system successfully reconstructs dense 3D scenes with consistent
-          geometry and appearance across viewpoints.
-        </p>
-      </div>
-      <div class="result-item">
-        <h3>Camera Trajectories</h3>
-        <p>
-          Planned and executed trajectories provide comprehensive scene coverage
-          with accurate pose estimation.
-        </p>
-      </div>
+<section class="results">
+  <h2>4. Results</h2>
+
+<iframe
+  loading="lazy"
+  src="{{ '/eecs206a/assets/spark/viewer.html' | relative_url }}?splat={{ '/eecs206a/assets/models/point_cloud.spz' | relative_url }}"
+  style="width:100%; height:500px; border:none; border-radius:12px;">
+</iframe>
+
+
+  <div class="results-gallery">
+    <div class="result-item">
+      <h3>3D Reconstruction Quality</h3>
+      <p>
+        The system produces dense 3D reconstructions exhibiting consistent geometry
+        and appearance across viewpoints, demonstrating the effectiveness of
+        robot-provided camera poses for metric scene reconstruction.
+      </p>
     </div>
-  </section>
+
+    <div class="result-item">
+      <h3>Camera Trajectory Coverage</h3>
+      <p>
+        Executed trajectories provide comprehensive coverage of the scene, enabling
+        stable optimization of the Gaussian Splatting representation.
+      </p>
+    </div>
+  </div>
+</section>
+
 
   <!-- ================= TECH ================= -->
 
   <section class="tech-stack">
-    <h2>Technology Stack</h2>
+    <h2>5. Technology Stack</h2>
     <div class="tech-list">
       <span class="tech-badge">ROS2</span>
       <span class="tech-badge">MoveIt</span>
       <span class="tech-badge">UR7e</span>
-      <span class="tech-badge">RealSense</span>
+      <span class="tech-badge">Intel RealSense</span>
       <span class="tech-badge">OpenCV</span>
       <span class="tech-badge">COLMAP</span>
       <span class="tech-badge">3D Gaussian Splatting</span>
