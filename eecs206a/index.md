@@ -133,7 +133,7 @@ permalink: /eecs206a/
 
 <iframe
   loading="lazy"
-  src="{{ '/eecs206a/assets/spark/viewer.html' | relative_url }}?splat={{ '/eecs206a/assets/models/point_cloud.spz' | relative_url }}"
+  src="{{ '/eecs206a/viewer/viewer.html' | relative_url }}?splat={{ '/eecs206a/assets/models/point_cloud.spz' | relative_url }}"
   style="width:100%; height:500px; border:none; border-radius:12px;">
 </iframe>
 
